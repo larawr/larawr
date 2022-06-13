@@ -1,22 +1,43 @@
 #include <stdio.h>
 #include <string.h>
 
-*/
-hello
+/*
+CCDSTRU GROUP 7
+Banez, Laiven Carleen S25
+Cruz, Daenielle S24
+Dio, Enrica S24
+Pegalan, Lara Nicole S24
+
 
 */
-// hi
 
 #define R 7
 #define C 5
 
 void DisplayBoard(char P[][C]){
-	int i, j;
-	
-	for (i = 0; i < R; i++){
-		for (j = 0; j < C; j++)
-		printf(" %c ", P[i][j]);
-	printf("\n");}
+    int i, j, x;
+
+
+    for (x=1;x<=5;x++)
+        printf(" %d ",x);
+        printf(" X");
+        printf("\n");
+
+    for (x=1;x<=8;x++)
+        printf("--");
+        printf("\n");
+
+
+    for (i = 0; i < R; i++){
+        for (j = 0; j < C; j++)
+        printf(" %c ", P[i][j]);
+        printf(" | %d", i+1);
+           printf("\n");}
+
+    for (x=1;x<=8;x++)
+        printf("--");
+        printf("Y");
+
 }
 
 void InitializeBoard(char P[][C], int *Alpha, int *Beta, int *Free){
