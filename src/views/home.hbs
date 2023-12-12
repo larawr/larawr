@@ -1,0 +1,147 @@
+<!--home.hbs-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>pinkkit</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="static/js/index.js" defer></script>
+    <script src="static/js/forms.js" defer></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <style>
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        #closeBtn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #closeBtn:hover,
+        #closeBtn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li class="active"><a href="/home">Home </a></li>
+                {{#if user}}
+                {{else}}
+                <li><a href="/login" id="login">Login</a></li>
+                <li><a href="/register" id="register">Register</a></li>
+                {{/if}}
+                <li><a href="/about" id="about">About</a></li>
+
+
+                {{#if user}}
+                <li><a href="/logout" id="logout">Logout</a></li>
+                <li><a href="/editprofile" id="editprofile">Edit Profile</a></li>
+                {{/if}}
+            </ul>
+        </nav>
+        <h1 id="title-head">{{#if user}}{{user.username}}{{else}}pinkkit{{/if}}</h1>
+    </header>
+
+    <main>
+        <section class="recent-posts-section">
+            <h2>{{#if searchQuery}}Search Results for "{{searchQuery}}"{{else}}Recent Posts{{/if}}</h2>
+            <form class="search-form" action="/home" method="GET">
+                <label for="search-input">Search Posts:</label>
+                <input type="text" id="search-input" name="search" placeholder="Enter a keyword..."
+                    value="{{searchQuery}}">
+                <button type="submit" name="search-button">Search</button>
+            </form>
+
+            {{#if user}}
+            <a href="/newpost" class="cta-button">Create Post</a>
+            {{/if}}
+            <ul class="post-list">
+                {{#each posts}}
+                <div id="myModal">
+                    <div class="modal-content">
+                        <span id="closeBtn" onclick="closeModal()">&times;</span>
+                        <h2>User Info</h2>
+                        <p><strong>Username:</strong> {{this.user.username}}</p>
+                        <p><strong>Account ID</strong> {{this.user.id}}</p>
+                    </div>
+                </div>
+                <li>
+                    <h3><a href="/viewpost?postID={{this.postID}}">{{this.title}}</a></h3>
+                    <p>{{this.body}}</p>
+                    <span class="post-meta">Posted by <a onclick="openModal()">
+                            {{this.username}}
+                        </a> on {{#if this.postedOn}}{{formatDate this.postedOn}}{{else}}Unknown Date{{/if}}</span>
+                    <!-- Additional post details and actions go here -->
+
+                    <!-- Comment Form -->
+                    <form class="comment-form" action="/addcomment" method="POST">
+                        <label for="comment-body-{{this.postID}}">Leave a comment:</label>
+                        <textarea name="commentBody" id="comment-body-{{this.postID}}" required></textarea>
+                        <input type="hidden" name="postID" value="{{this.postID}}">
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </li>
+                {{/each}}
+            </ul>
+
+        </section>
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2023 pinkkit. All rights reserved.</p>
+    </footer>
+
+
+
+    <script src="https://kit.fontawesome.com/69c55ad5c0.js" crossorigin="anonymous"></script>
+
+    <script>
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        // Close the modal if the user clicks outside of it
+        window.onclick = function (event) {
+            const modal = document.getElementById('myModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+
+</html>
